@@ -1,0 +1,13 @@
+{
+  "requirements": {
+    "go": "1.9.2"
+  },
+  "commands": [
+    {
+      "name": "diagnostic-tools",
+      "version": "3.0.0",
+      "description": "Diagnostic Tools",
+      "bin": "https://github.com/apiheat/akamai-cli-a2/releases/download/v{{.Version}}/akamai-cli-{{.Name}}_{{.OS}}_{{.Arch}}{{.BinSuffix}}"
+    }
+  ]
+}
