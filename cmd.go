@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -16,6 +17,7 @@ func cmdTranslateError(c *cli.Context) error {
 }
 
 func translateError(c *cli.Context) error {
+	count := c.Int("retries")
 	// Run request
 	errorString := strings.Replace(common.SetStringId(c, "Please provide Error Code"), "#", "", -1)
 	log.Info(fmt.Sprintf("Launch Error Translation Request for error code: %s, please note '#' is ignored", errorString))
@@ -39,26 +41,29 @@ func translateError(c *cli.Context) error {
 
 	// Check request
 	// With requestId and retryAfter data we can try to poll data
-	log.Info(fmt.Sprintf("Making Translate Error request for ID: %s", requestID))
+	log.Info(fmt.Sprintf("Making Translate Error request for ID: %s. Attempt 1 out of %d", requestID, c.Int("retries")))
 	message, resp, err := apiClient.DT.TranslateAnError(requestID)
-
-	log.Info(fmt.Sprintf("Polling error code in %d seconds", request.RetryAfter))
-	time.Sleep(time.Duration(request.RetryAfter+1) * time.Second)
+	count -= 2
 
 	if err != nil || resp.Response.StatusCode != 200 {
 		for {
+			log.Info(fmt.Sprintf("Polling error code in %d seconds", request.RetryAfter))
+			time.Sleep(time.Duration(request.RetryAfter+1) * time.Second)
+
+			log.Info(fmt.Sprintf("Making Translate Error request for ID: %s. Attempt %d out of %d", requestID, c.Int("retries")-count, c.Int("retries")))
+
+			count--
+
 			message, resp, err = apiClient.DT.TranslateAnError(requestID)
 			//common.ErrorCheck(err)
 			if resp.Response.StatusCode == 200 {
 				break
 			}
 
-			if resp.Response.StatusCode != 200 {
-				fmt.Println(resp.Body)
+			if count == 0 {
+				log.Error("Operation took too long. Exiting...")
+				os.Exit(2)
 			}
-
-			log.Info(fmt.Sprintf("Polling error code in %d seconds", request.RetryAfter))
-			time.Sleep(time.Duration(request.RetryAfter+1) * time.Second)
 		}
 	}
 

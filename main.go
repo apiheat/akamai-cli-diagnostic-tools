@@ -27,6 +27,13 @@ func main() {
 			Aliases: []string{"t"},
 			Usage:   "Get information about error strings produced by edge servers when a request to retrieve content fails",
 			Action:  cmdTranslateError,
+			Flags: []cli.Flag{
+				cli.IntFlag{
+					Name:  "retries",
+					Value: 50,
+					Usage: "Number of retries to get translation request results",
+				},
+			},
 		},
 	}
 
