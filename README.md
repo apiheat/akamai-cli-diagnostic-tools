@@ -69,11 +69,13 @@ AUTHORS:
    Rafal Pieniazek
 
 COMMANDS:
+     diagnostic-link     Generates a unique link to send to a user to diagnose a problem
+     is-akamai-ip, i     Checks whether the specified ip address is part of the Akamai edge network
      translate-error, t  Get information about error strings produced by edge servers when a request to retrieve content fails
      help, h             Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --config FILE, -c FILE   Location of the credentials FILE (default: "/Users/USERNAME/.edgerc") [$AKAMAI_EDGERC_CONFIG]
+   --config FILE, -c FILE   Location of the credentials FILE (default: "/Users/partamonov/.edgerc") [$AKAMAI_EDGERC_CONFIG]
    --debug value            Debug Level [$AKAMAI_EDGERC_DEBUGLEVEL]
    --section NAME, -s NAME  NAME of section to use from credentials file (default: "default") [$AKAMAI_EDGERC_SECTION]
    --help, -h               show help

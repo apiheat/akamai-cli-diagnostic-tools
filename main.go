@@ -66,13 +66,6 @@ func main() {
 					Name:   "get",
 					Usage:  "Gets details on IP addresses used for an end user’s diagnostic link test",
 					Action: cmdGetLinkDetails,
-					Flags: []cli.Flag{
-						cli.IntFlag{
-							Name:  "retries",
-							Value: 10,
-							Usage: "Number of retries to get ip address request result",
-						},
-					},
 				},
 			},
 		},
