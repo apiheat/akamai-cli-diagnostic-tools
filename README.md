@@ -69,8 +69,8 @@ AUTHORS:
    Rafal Pieniazek
 
 COMMANDS:
-     diagnostic-link     Generates a unique link to send to a user to diagnose a problem
-     is-akamai-ip, i     Checks whether the specified ip address is part of the Akamai edge network
+     diagnostic-link     Generate/List/Get a unique link to send to a user to diagnose a problem
+     ip                  IP adresses related actions, like 'dig', 'curl', 'mtr', 'is cdn ip?' or 'ip geolocation' and so on
      translate-error, t  Get information about error strings produced by edge servers when a request to retrieve content fails
      help, h             Shows a list of commands or help for one command
 
