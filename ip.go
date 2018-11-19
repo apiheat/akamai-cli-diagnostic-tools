@@ -66,10 +66,10 @@ func ipCurl(c *cli.Context) error {
 }
 
 func ipMtr(c *cli.Context) error {
-	ip := common.SetStringId(c, "Please provide IP")
+	obj := common.SetStringId(c, "Please provide IP")
 
-	if !isIPv4(ip) {
-		log.Error("Provided IP address is not valid IPv4 address:", ip)
+	if !isIPv4(obj) {
+		log.Error("Provided IP address is not valid IPv4 address:", obj)
 		os.Exit(3)
 	}
 
@@ -89,7 +89,7 @@ func ipMtr(c *cli.Context) error {
 		os.Exit(4)
 	}
 
-	_, response, err := apiClient.DT.IPMtr(ip, c.String("destination-domain"), c.Bool("resolve-dns"))
+	_, response, err := apiClient.DT.Mtr(obj, requestFromIP, c.String("destination-domain"), c.Bool("resolve-dns"))
 	common.ErrorCheck(err)
 
 	if response.Response.StatusCode != http.StatusOK {

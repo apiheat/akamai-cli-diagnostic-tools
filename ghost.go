@@ -16,11 +16,29 @@ func cmdGhostDig(c *cli.Context) error {
 }
 
 func cmdGhostMtr(c *cli.Context) error {
-	return ipMtr(c)
+	return ghostMtr(c)
 }
 
 func cmdGhostCurl(c *cli.Context) error {
 	return ghostCurl(c)
+}
+
+func cmdGhostListLocations(c *cli.Context) error {
+	return ghostListLocations(c)
+}
+
+func ghostListLocations(c *cli.Context) error {
+	request, response, err := apiClient.DT.ListGhostLocations()
+	common.ErrorCheck(err)
+
+	if response.Response.StatusCode != http.StatusOK {
+		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		os.Exit(2)
+	}
+
+	common.OutputJSON(request.Locations)
+
+	return nil
 }
 
 func ghostCurl(c *cli.Context) error {
@@ -77,6 +95,38 @@ func ghostDig(c *cli.Context) error {
 	}
 
 	_, response, err := apiClient.DT.Dig(obj, requestFromGhost, c.String("hostname"), c.String("query-type"))
+	common.ErrorCheck(err)
+
+	if response.Response.StatusCode != http.StatusOK {
+		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		os.Exit(2)
+	}
+
+	common.PrintJSON(response.Body)
+
+	return nil
+}
+
+func ghostMtr(c *cli.Context) error {
+	obj := common.SetStringId(c, "Please provide Ghost Location Name")
+
+	if c.String("destination-domain") == "" {
+		log.Error("Provide destination domain, this is required parameter")
+		os.Exit(4)
+	}
+
+	u, err := url.Parse(c.String("destination-domain"))
+	if err != nil {
+		log.Errorf("'destination-domain' is not valid URL: %s'", c.String("destination-domain"))
+		os.Exit(4)
+	}
+
+	if u.Scheme != "" {
+		log.Errorf("Please do not provide HTTP scheme in 'destination-domain' : %s'", c.String("destination-domain"))
+		os.Exit(4)
+	}
+
+	_, response, err := apiClient.DT.Mtr(obj, requestFromGhost, c.String("destination-domain"), c.Bool("resolve-dns"))
 	common.ErrorCheck(err)
 
 	if response.Response.StatusCode != http.StatusOK {

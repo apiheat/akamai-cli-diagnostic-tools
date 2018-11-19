@@ -135,6 +135,12 @@ func main() {
 					},
 				},
 				{
+					Name:      "locations",
+					Usage:     "Lists active Akamai edge server locations from which you can run diagnostic tools",
+					UsageText: fmt.Sprintf("%s ghost locations", appName),
+					Action:    cmdGhostListLocations,
+				},
+				{
 					Name:      "mtr",
 					Usage:     "Run mtr to check connectivity between a domain and a location within the Akamai network not local to you. Specify location",
 					UsageText: fmt.Sprintf("%s ghost mtr [command options] GHOST_LOCATION", appName),
