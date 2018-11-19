@@ -34,10 +34,10 @@ func cmdIPCurl(c *cli.Context) error {
 }
 
 func ipCurl(c *cli.Context) error {
-	ip := common.SetStringId(c, "Please provide IP")
+	obj := common.SetStringId(c, "Please provide IP")
 
-	if !isIPv4(ip) {
-		log.Error("Provided IP address is not valid IPv4 address:", ip)
+	if !isIPv4(obj) {
+		log.Error("Provided IP address is not valid IPv4 address:", obj)
 		os.Exit(3)
 	}
 
@@ -52,7 +52,7 @@ func ipCurl(c *cli.Context) error {
 		os.Exit(4)
 	}
 
-	_, response, err := apiClient.DT.IPCurl(ip, c.String("url"), c.String("user-agent"))
+	_, response, err := apiClient.DT.Curl(obj, requestFromIP, c.String("url"), c.String("user-agent"))
 	common.ErrorCheck(err)
 
 	if response.Response.StatusCode != http.StatusOK {
@@ -103,12 +103,12 @@ func ipMtr(c *cli.Context) error {
 }
 
 func ipDig(c *cli.Context) error {
-	ip := common.SetStringId(c, "Please provide IP")
+	obj := common.SetStringId(c, "Please provide IP")
 
 	allowedQueries := []string{"A", "AAAA", "CNAME", "MX", "NS", "PTR", "SOA"}
 
-	if !isIPv4(ip) {
-		log.Error("Provided IP address is not valid IPv4 address:", ip)
+	if !isIPv4(obj) {
+		log.Error("Provided IP address is not valid IPv4 address:", obj)
 		os.Exit(3)
 	}
 
@@ -133,7 +133,7 @@ func ipDig(c *cli.Context) error {
 		os.Exit(5)
 	}
 
-	_, response, err := apiClient.DT.IPDig(ip, c.String("hostname"), c.String("query-type"))
+	_, response, err := apiClient.DT.Dig(obj, requestFromIP, c.String("hostname"), c.String("query-type"))
 	common.ErrorCheck(err)
 
 	if response.Response.StatusCode != http.StatusOK {
