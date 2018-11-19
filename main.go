@@ -31,7 +31,48 @@ func main() {
 				cli.IntFlag{
 					Name:  "retries",
 					Value: 50,
-					Usage: "Number of retries to get translation request results",
+					Usage: "Number of retries to get translation request result",
+				},
+			},
+		},
+		{
+			Name:    "is-akamai-cdn-ip",
+			Aliases: []string{"i"},
+			Usage:   "Checks whether the specified ip address is part of the Akamai edge network",
+			Action:  cmdCDNStatus,
+		},
+		{
+			Name:  "diagnostic-link",
+			Usage: "Generate/List/Get a unique link to send to a user to diagnose a problem",
+			Subcommands: []cli.Command{
+				{
+					Name:   "generate",
+					Usage:  "Generates a unique link to send to a user to diagnose a problem",
+					Action: cmdGenerateLinkRequest,
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "user",
+							Value: "beloved-customer",
+							Usage: "User name for whom you will generate link",
+						},
+					},
+				},
+				{
+					Name:   "list",
+					Usage:  "List users who have loaded diagnostic links over the past six months",
+					Action: cmdListLinkRequests,
+				},
+				{
+					Name:   "get",
+					Usage:  "Gets details on IP addresses used for an end user’s diagnostic link test",
+					Action: cmdGetLinkDetails,
+					Flags: []cli.Flag{
+						cli.IntFlag{
+							Name:  "retries",
+							Value: 10,
+							Usage: "Number of retries to get ip address request result",
+						},
+					},
 				},
 			},
 		},
