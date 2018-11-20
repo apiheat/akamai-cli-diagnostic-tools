@@ -51,6 +51,11 @@ func translateError(c *cli.Context) error {
 	message, resp, err := apiClient.DT.TranslateAnError(requestID)
 	count -= 2
 
+	if resp.Response.StatusCode == http.StatusBadRequest {
+		common.PrintJSON(resp.Body)
+		os.Exit(3)
+	}
+
 	if err != nil || resp.Response.StatusCode != http.StatusOK {
 		for {
 			log.Info(fmt.Sprintf("Polling error code in %d seconds", request.RetryAfter))
@@ -61,7 +66,13 @@ func translateError(c *cli.Context) error {
 			count--
 
 			message, resp, err = apiClient.DT.TranslateAnError(requestID)
-			//common.ErrorCheck(err)
+			common.ErrorCheck(err)
+
+			if resp.Response.StatusCode == http.StatusBadRequest {
+				common.PrintJSON(resp.Body)
+				break
+			}
+
 			if resp.Response.StatusCode == http.StatusOK {
 				break
 			}

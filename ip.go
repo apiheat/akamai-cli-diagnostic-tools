@@ -57,6 +57,7 @@ func ipCurl(c *cli.Context) error {
 
 	if response.Response.StatusCode != http.StatusOK {
 		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		common.PrintJSON(response.Body)
 		os.Exit(2)
 	}
 
@@ -94,6 +95,7 @@ func ipMtr(c *cli.Context) error {
 
 	if response.Response.StatusCode != http.StatusOK {
 		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		common.PrintJSON(response.Body)
 		os.Exit(2)
 	}
 
@@ -138,6 +140,7 @@ func ipDig(c *cli.Context) error {
 
 	if response.Response.StatusCode != http.StatusOK {
 		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		common.PrintJSON(response.Body)
 		os.Exit(2)
 	}
 
@@ -159,6 +162,7 @@ func ipGeolocation(c *cli.Context) error {
 
 	if response.Response.StatusCode != http.StatusOK {
 		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		common.PrintJSON(response.Body)
 		os.Exit(2)
 	}
 
@@ -180,6 +184,7 @@ func isCDNIP(c *cli.Context) error {
 
 	if response.Response.StatusCode != http.StatusOK {
 		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		common.PrintJSON(response.Body)
 		os.Exit(2)
 	}
 

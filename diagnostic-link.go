@@ -37,6 +37,7 @@ func generateLink(c *cli.Context) error {
 
 	if response.Response.StatusCode != http.StatusCreated {
 		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		common.PrintJSON(response.Body)
 		os.Exit(2)
 	}
 
@@ -51,6 +52,7 @@ func listLinkRequests(c *cli.Context) error {
 
 	if response.Response.StatusCode != http.StatusOK {
 		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		common.PrintJSON(response.Body)
 		os.Exit(2)
 	}
 
@@ -66,6 +68,7 @@ func getLinkRequest(c *cli.Context) error {
 
 	if response.Response.StatusCode != http.StatusOK {
 		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		common.PrintJSON(response.Body)
 		os.Exit(2)
 	}
 

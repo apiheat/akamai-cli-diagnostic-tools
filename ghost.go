@@ -60,6 +60,7 @@ func ghostCurl(c *cli.Context) error {
 
 	if response.Response.StatusCode != http.StatusOK {
 		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		common.PrintJSON(response.Body)
 		os.Exit(2)
 	}
 
@@ -99,6 +100,7 @@ func ghostDig(c *cli.Context) error {
 
 	if response.Response.StatusCode != http.StatusOK {
 		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		common.PrintJSON(response.Body)
 		os.Exit(2)
 	}
 
@@ -131,6 +133,7 @@ func ghostMtr(c *cli.Context) error {
 
 	if response.Response.StatusCode != http.StatusOK {
 		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		common.PrintJSON(response.Body)
 		os.Exit(2)
 	}
 
