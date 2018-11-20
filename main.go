@@ -42,6 +42,31 @@ func main() {
 			},
 		},
 		{
+			Name:  "gtm",
+			Usage: "Get information about Global Traffic Management properties and gets test and target IPs for a domain and property.",
+			Subcommands: []cli.Command{
+				{
+					Name:      "properties",
+					UsageText: fmt.Sprintf("%s gtm properties", appName),
+					Usage:     "List all Global Traffic Management properties (subdomains) to which you have access",
+					Action:    cmdListGTMProperties,
+				},
+				{
+					Name:      "ip-addresses",
+					Usage:     "Gets test and target IPs for a domain and property. Run List GTM Properties for domain and property parameter values. PROPERTY - The Global Traffic Management property for which to collect IPs",
+					UsageText: fmt.Sprintf("%s gtm ip-addresses --domain DOMAIN PROPERTY", appName),
+					Action:    cmdListGTMIPAddresses,
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:  "domain",
+							Value: "",
+							Usage: "The Global Traffic Management domain to which the property subdomain belongs",
+						},
+					},
+				},
+			},
+		},
+		{
 			Name:  "ip",
 			Usage: "IP addresses related actions, like 'dig', 'curl', 'mtr', 'is cdn ip?' or 'ip geolocation' and so on",
 			Subcommands: []cli.Command{
