@@ -71,6 +71,7 @@ AUTHORS:
 COMMANDS:
      diagnostic-link     Generate/List/Get a unique link to send to a user to diagnose a problem
      ghost               Ghost Location related actions, like 'dig', 'curl', 'mtr'
+     gtm                 Get information about Global Traffic Management properties and gets test and target IPs for a domain and property.
      ip                  IP addresses related actions, like 'dig', 'curl', 'mtr', 'is cdn ip?' or 'ip geolocation' and so on
      translate-error, t  Get information about error strings produced by edge servers when a request to retrieve content fails
      help, h             Shows a list of commands or help for one command
