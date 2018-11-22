@@ -26,3 +26,4 @@ changelog:
       - '.*typo.*'
       - '[V|v]ersion.*\sbump'
       - 'Updated version in cli.json'
+      - 'Readme update'

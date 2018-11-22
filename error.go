@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/urfave/cli"
 
 	common "github.com/apiheat/akamai-cli-common"
@@ -42,8 +43,12 @@ func translateError(c *cli.Context) error {
 		time.Sleep(61 * time.Second)
 	}
 
+	s := spinner.New(spinner.CharSets[9], 100*time.Millisecond)
+
 	log.Info(fmt.Sprintf("Polling error code in %d seconds", request.RetryAfter))
 	time.Sleep(time.Duration(request.RetryAfter+1) * time.Second)
+
+	s.Start()
 
 	// Check request
 	// With requestId and retryAfter data we can try to poll data
@@ -69,15 +74,24 @@ func translateError(c *cli.Context) error {
 			common.ErrorCheck(err)
 
 			if resp.Response.StatusCode == http.StatusBadRequest {
+				s.Stop()
 				common.PrintJSON(resp.Body)
-				break
+				os.Exit(3)
+			}
+
+			if resp.Response.StatusCode == http.StatusForbidden {
+				s.Stop()
+				common.PrintJSON(resp.Body)
+				os.Exit(3)
 			}
 
 			if resp.Response.StatusCode == http.StatusOK {
+				s.Stop()
 				break
 			}
 
 			if count == 0 {
+				s.Stop()
 				log.Error("Operation took too long. Exiting...")
 				os.Exit(2)
 			}
