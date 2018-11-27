@@ -69,15 +69,16 @@ AUTHORS:
    Rafal Pieniazek
 
 COMMANDS:
-     diagnostic-link     Generate/List/Get a unique link to send to a user to diagnose a problem
-     ghost               Ghost Location related actions, like 'dig', 'curl', 'mtr'
-     gtm                 Get information about Global Traffic Management properties and gets test and target IPs for a domain and property.
-     ip                  IP addresses related actions, like 'dig', 'curl', 'mtr', 'is cdn ip?' or 'ip geolocation' and so on
-     translate-error, t  Get information about error strings produced by edge servers when a request to retrieve content fails
-     help, h             Shows a list of commands or help for one command
+     diagnostic-link        Generate/List/Get a unique link to send to a user to diagnose a problem
+     ghost                  Ghost Location related actions, like 'dig', 'curl', 'mtr'
+     gtm                    Get information about Global Traffic Management properties and gets test and target IPs for a domain and property.
+     ip                     IP addresses related actions, like 'dig', 'curl', 'mtr', 'is cdn ip?' or 'ip geolocation' and so on
+     translate-error, t     Get information about error strings produced by edge servers when a request to retrieve content fails
+     translate-request, tr  Same as 'translate-error' command, but this is not waiting for final results and you need to 'launch', 'check' and 'get' requested information
+     help, h                Shows a list of commands or help for one command
 
 GLOBAL OPTIONS:
-   --config FILE, -c FILE   Location of the credentials FILE (default: "/Users/partamonov/.edgerc") [$AKAMAI_EDGERC_CONFIG]
+   --config FILE, -c FILE   Location of the credentials FILE (default: "/Users/USERNAME/.edgerc") [$AKAMAI_EDGERC_CONFIG]
    --debug value            Debug Level [$AKAMAI_EDGERC_DEBUGLEVEL]
    --section NAME, -s NAME  NAME of section to use from credentials file (default: "default") [$AKAMAI_EDGERC_SECTION]
    --help, -h               show help

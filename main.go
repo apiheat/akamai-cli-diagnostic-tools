@@ -28,6 +28,31 @@ func main() {
 
 	app.Commands = []cli.Command{
 		{
+			Name:    "translate-request",
+			Aliases: []string{"tr"},
+			Usage:   "Same as 'translate-error' command, but this is not waiting for final results and you need to 'launch', 'check' and 'get' requested information",
+			Subcommands: []cli.Command{
+				{
+					Name:      "launch",
+					Usage:     "Launches a request to retrieve the data about error asynchronously. Check the poll link after the retryAfter interval or use the requestID to Check an Error Translation Request",
+					UsageText: fmt.Sprintf("%s translate-error launch [command options] ERROR_CODE", appName),
+					Action:    cmdLaunchTranslateErrorRequest,
+				},
+				{
+					Name:      "check",
+					Usage:     "After running 'launch' command this checks the status of an asynchronous request for data. A 200 PollResponse with a Retry-After header indicates the request is still processing. When the data is ready, a 303 response provides a Location header where you can GET the data using the 'get' command",
+					UsageText: fmt.Sprintf("%s translate-error check [command options] REQUEST_ID_FROM_LAUNCH_OUTPUT", appName),
+					Action:    cmdCheckTranslateErrorRequest,
+				},
+				{
+					Name:      "get",
+					Usage:     "Get information about error strings produced by edge servers when a request to retrieve content fails. The error represents an instance of a problem, and this operation gets details on what happened",
+					UsageText: fmt.Sprintf("%s translate-error check [command options] REQUEST_ID_FROM_LAUNCH_OUTPUT", appName),
+					Action:    cmdGetTranslateErrorRequest,
+				},
+			},
+		},
+		{
 			Name:      "translate-error",
 			Aliases:   []string{"t"},
 			UsageText: fmt.Sprintf("%s translate-error 'Error String' --retries N", appName),

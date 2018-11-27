@@ -14,15 +14,81 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+func cmdLaunchTranslateErrorRequest(c *cli.Context) error {
+	return launchErrorRequest(c)
+}
+
+func cmdCheckTranslateErrorRequest(c *cli.Context) error {
+	return checkErrorRequest(c)
+}
+
+func cmdGetTranslateErrorRequest(c *cli.Context) error {
+	return getErrorRequest(c)
+}
+
 func cmdTranslateError(c *cli.Context) error {
 	return translateError(c)
+}
+
+func validateErrorString(err string) string {
+	errorString := strings.Replace(err, "#", "", -1)
+	log.Info(fmt.Sprintf("Launch Error Translation Request for error code: %s, please note '#' is ignored", errorString))
+
+	return errorString
+}
+
+func launchErrorRequest(c *cli.Context) error {
+	errorString := validateErrorString(common.SetStringId(c, "Please provide Error Code"))
+
+	_, response, err := apiClient.DT.LaunchErrorTranslationRequest(errorString)
+	common.ErrorCheck(err)
+
+	if response.Response.StatusCode != http.StatusAccepted {
+		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
+		os.Exit(2)
+	}
+
+	common.PrintJSON(response.Body)
+
+	return nil
+}
+
+func checkErrorRequest(c *cli.Context) error {
+	requestID := common.SetStringId(c, "Please provide RequestID from 'launch' command output")
+
+	_, response, err := apiClient.DT.CheckAnErrorTranslationRequest(requestID)
+	common.ErrorCheck(err)
+
+	if response.Response.StatusCode == http.StatusUnauthorized {
+		fmt.Println("{\n    \"Message\": \"Looks like it is time to get your error details.\"\n}")
+		return nil
+	}
+
+	common.PrintJSON(response.Body)
+
+	return nil
+}
+
+func getErrorRequest(c *cli.Context) error {
+	requestID := common.SetStringId(c, "Please provide RequestID from 'launch' command output")
+
+	message, resp, err := apiClient.DT.TranslateAnError(requestID)
+	common.ErrorCheck(err)
+
+	if resp.Response.StatusCode != http.StatusOK {
+		common.PrintJSON(resp.Body)
+		os.Exit(3)
+	}
+
+	common.OutputJSON(message)
+
+	return nil
 }
 
 func translateError(c *cli.Context) error {
 	count := c.Int("retries")
 	// Run request
-	errorString := strings.Replace(common.SetStringId(c, "Please provide Error Code"), "#", "", -1)
-	log.Info(fmt.Sprintf("Launch Error Translation Request for error code: %s, please note '#' is ignored", errorString))
+	errorString := validateErrorString(common.SetStringId(c, "Please provide Error Code"))
 
 	request, response, err := apiClient.DT.LaunchErrorTranslationRequest(errorString)
 	common.ErrorCheck(err)
