@@ -27,23 +27,23 @@
 
 [[constraint]]
   name = "github.com/apiheat/akamai-cli-common"
-  version = "^2.0.0"
+  version = "^3.0.0"
 
 [[constraint]]
   name = "github.com/apiheat/go-edgegrid"
-  version = "^5.0.0"
+  version = "6.1.1"
 
 [[constraint]]
   name = "github.com/briandowns/spinner"
-  version = "1.4.0"
+  version = "1.7.0"
 
 [[constraint]]
   name = "github.com/sirupsen/logrus"
-  version = "1.2.0"
+  version = "1.4.2"
 
 [[constraint]]
   name = "github.com/urfave/cli"
-  version = "1.20.0"
+  version = "1.22.0"
 
 [prune]
   go-tests = true

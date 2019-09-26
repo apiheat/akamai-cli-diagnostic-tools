@@ -6,14 +6,14 @@ import (
 	"sort"
 
 	common "github.com/apiheat/akamai-cli-common"
-	edgegrid "github.com/apiheat/go-edgegrid"
+	"github.com/apiheat/go-edgegrid/edgegrid"
+	"github.com/apiheat/go-edgegrid/service/diagnosticv2"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/urfave/cli"
 )
 
 var (
-	apiClient       *edgegrid.Client
 	appName, appVer string
 )
 
@@ -266,14 +266,14 @@ func main() {
 	app.Before = func(c *cli.Context) error {
 		var err error
 
-		// Provide struct details needed for apiClient init
-		apiClientOpts := &edgegrid.ClientOptions{}
-		apiClientOpts.ConfigPath = c.GlobalString("config")
-		apiClientOpts.ConfigSection = c.GlobalString("section")
-		apiClientOpts.DebugLevel = c.GlobalString("debug")
-		apiClientOpts.AccountSwitchKey = c.GlobalString("ask")
+		config := edgegrid.NewConfig()
+ 		  .WithCredentials(edgegrid.NewCredentials().AutoLoad(c.GlobalString("section")))
+ 		  .WithLogVerbosity(c.GlobalString("debug"))
+			.WithRequestDebug(true)
+			.WithAccountSwitchKey(c.GlobalString("ask"))
 
-		apiClient, err = edgegrid.NewClient(nil, apiClientOpts)
+		// Provide struct details needed for apiClient init
+		apiClient, err = diagnosticv2.New(config)
 
 		if err != nil {
 			fmt.Println(err)
