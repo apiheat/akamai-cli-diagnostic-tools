@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"net/http"
 	"net/url"
 	"os"
+	"strconv"
+	"strings"
 
 	common "github.com/apiheat/akamai-cli-common"
 	log "github.com/sirupsen/logrus"
@@ -32,47 +34,48 @@ func generateLink(c *cli.Context) error {
 		os.Exit(3)
 	}
 
-	_, response, err := apiClient.DT.GenerateDiagnosticLink(c.String("user"), testURL)
+	response, err := apiClient.GenerateDiagnosticLink(c.String("user"), testURL)
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusCreated {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.PrintJSON(response.Body)
+	common.PrintJSON(outputJSON(response))
 
 	return nil
 }
 
 func listLinkRequests(c *cli.Context) error {
-	request, response, err := apiClient.DT.ListDiagnosticLinkRequests()
+	response, err := apiClient.ListDiagnosticLinkRequests()
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.OutputJSON(request.EndUserIPRequests)
+	common.OutputJSON(response.EndUserIPRequests)
 	return nil
 }
 
 func getLinkRequest(c *cli.Context) error {
 	requestID := common.SetStringId(c, "Please provide valid Request ID")
 
-	request, response, err := apiClient.DT.GetDiagnosticLinkRequest(requestID)
+	response, err := apiClient.RetrieveDiagnosticLinkRequest(requestID)
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.OutputJSON(request.EndUserIPDetails)
+	common.OutputJSON(response.EndUserIPDetails)
 
 	return nil
+}
+
+func unescapeUnicodeCharactersInJSON(_jsonRaw json.RawMessage) (json.RawMessage, error) {
+	str, err := strconv.Unquote(strings.Replace(strconv.Quote(string(_jsonRaw)), `\\u`, `\u`, -1))
+	if err != nil {
+		return nil, err
+	}
+	return []byte(str), nil
+}
+
+func outputJSON(input interface{}) string {
+	b, err := json.Marshal(input)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	jsonRawUnescaped, _ := unescapeUnicodeCharactersInJSON(json.RawMessage(b))
+
+	return string(jsonRawUnescaped)
 }

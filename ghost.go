@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
 	"net/url"
 	"os"
 
@@ -28,16 +26,10 @@ func cmdGhostListLocations(c *cli.Context) error {
 }
 
 func ghostListLocations(c *cli.Context) error {
-	request, response, err := apiClient.DT.ListGhostLocations()
+	response, err := apiClient.ListGhostLocations()
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		os.Exit(2)
-	}
-
-	common.OutputJSON(request.Locations)
-
+	common.PrintJSON(outputJSON(response.Locations))
 	return nil
 }
 
@@ -55,17 +47,10 @@ func ghostCurl(c *cli.Context) error {
 		os.Exit(4)
 	}
 
-	_, response, err := apiClient.DT.Curl(obj, requestFromGhost, c.String("url"), c.String("user-agent"))
+	response, err := apiClient.ExecuteCurl(obj, requestFromGhost, c.String("url"), c.String("user-agent"))
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.PrintJSON(response.Body)
-
+	common.PrintJSON(outputJSON(response.CurlResults))
 	return nil
 }
 
@@ -95,17 +80,10 @@ func ghostDig(c *cli.Context) error {
 		os.Exit(5)
 	}
 
-	_, response, err := apiClient.DT.Dig(obj, requestFromGhost, c.String("hostname"), c.String("query-type"))
+	response, err := apiClient.ExecuteDig(obj, requestFromGhost, c.String("hostname"), c.String("query-type"))
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.PrintJSON(response.Body)
-
+	common.PrintJSON(outputJSON(response.DigInfo))
 	return nil
 }
 
@@ -128,16 +106,9 @@ func ghostMtr(c *cli.Context) error {
 		os.Exit(4)
 	}
 
-	_, response, err := apiClient.DT.Mtr(obj, requestFromGhost, c.String("destination-domain"), c.Bool("resolve-dns"))
+	response, err := apiClient.ExecuteMtr(obj, requestFromGhost, c.String("destination-domain"), c.Bool("resolve-dns"))
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.PrintJSON(response.Body)
-
+	common.PrintJSON(outputJSON(response.Mtr))
 	return nil
 }
