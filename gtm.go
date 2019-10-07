@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
 	"os"
 
 	common "github.com/apiheat/akamai-cli-common"
@@ -19,17 +17,10 @@ func cmdListGTMIPAddresses(c *cli.Context) error {
 }
 
 func listGTM(c *cli.Context) error {
-	request, response, err := apiClient.DT.ListGTMProperties()
+	response, err := apiClient.ListGTMProperties()
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.OutputJSON(request.GtmProperties)
-
+	common.PrintJSON(outputJSON(response.GtmProperties))
 	return nil
 }
 
@@ -41,16 +32,10 @@ func listGTMIPs(c *cli.Context) error {
 		os.Exit(4)
 	}
 
-	request, response, err := apiClient.DT.ListGTMPropertyIPs(property, c.String("domain"))
+	response, err := apiClient.ListGTMPropertyIPs(property, c.String("domain"))
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.OutputJSON(request.GtmPropertyIps)
+	common.PrintJSON(outputJSON(response.GtmPropertyIps))
 
 	return nil
 }

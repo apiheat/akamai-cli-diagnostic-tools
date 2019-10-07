@@ -1,8 +1,6 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
 	"net/url"
 	"os"
 	"strconv"
@@ -52,17 +50,10 @@ func ipCurl(c *cli.Context) error {
 		os.Exit(4)
 	}
 
-	_, response, err := apiClient.DT.Curl(obj, requestFromIP, c.String("url"), c.String("user-agent"))
+	response, err := apiClient.ExecuteCurl(obj, requestFromIP, c.String("url"), c.String("user-agent"))
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.PrintJSON(response.Body)
-
+	common.PrintJSON(outputJSON(response.CurlResults))
 	return nil
 }
 
@@ -90,17 +81,10 @@ func ipMtr(c *cli.Context) error {
 		os.Exit(4)
 	}
 
-	_, response, err := apiClient.DT.Mtr(obj, requestFromIP, c.String("destination-domain"), c.Bool("resolve-dns"))
+	response, err := apiClient.ExecuteMtr(obj, requestFromIP, c.String("destination-domain"), c.Bool("resolve-dns"))
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.PrintJSON(response.Body)
-
+	common.PrintJSON(outputJSON(response.Mtr))
 	return nil
 }
 
@@ -135,17 +119,10 @@ func ipDig(c *cli.Context) error {
 		os.Exit(5)
 	}
 
-	_, response, err := apiClient.DT.Dig(obj, requestFromIP, c.String("hostname"), c.String("query-type"))
+	response, err := apiClient.ExecuteDig(obj, requestFromIP, c.String("hostname"), c.String("query-type"))
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.PrintJSON(response.Body)
-
+	common.PrintJSON(outputJSON(response.DigInfo))
 	return nil
 }
 
@@ -157,17 +134,10 @@ func ipGeolocation(c *cli.Context) error {
 		os.Exit(3)
 	}
 
-	request, response, err := apiClient.DT.IPGeolocation(ip)
+	response, err := apiClient.RetrieveIPGeolocation(ip)
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.OutputJSON(request.GeoLocation)
-
+	common.PrintJSON(outputJSON(response.GeoLocation))
 	return nil
 }
 
@@ -179,16 +149,10 @@ func isCDNIP(c *cli.Context) error {
 		os.Exit(3)
 	}
 
-	request, response, err := apiClient.DT.CDNStatus(ip)
+	response, err := apiClient.CheckIPAddress(ip)
 	common.ErrorCheck(err)
 
-	if response.Response.StatusCode != http.StatusOK {
-		log.Error(fmt.Sprintf("Something went wrong, re-run in debug mode. Response code: %d", response.Response.StatusCode))
-		common.PrintJSON(response.Body)
-		os.Exit(2)
-	}
-
-	common.OutputJSON(request)
+	common.PrintJSON(outputJSON(response))
 
 	return nil
 }

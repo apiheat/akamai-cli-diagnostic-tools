@@ -6,14 +6,15 @@ import (
 	"sort"
 
 	common "github.com/apiheat/akamai-cli-common"
-	edgegrid "github.com/apiheat/go-edgegrid"
+	edgegrid "github.com/apiheat/go-edgegrid/v6/edgegrid"
+	service "github.com/apiheat/go-edgegrid/v6/service/diagnosticv2"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/urfave/cli"
 )
 
 var (
-	apiClient       *edgegrid.Client
+	apiClient       *service.Diagnosticv2
 	appName, appVer string
 )
 
@@ -264,21 +265,13 @@ func main() {
 	sort.Sort(cli.CommandsByName(app.Commands))
 
 	app.Before = func(c *cli.Context) error {
-		var err error
-
-		// Provide struct details needed for apiClient init
-		apiClientOpts := &edgegrid.ClientOptions{}
-		apiClientOpts.ConfigPath = c.GlobalString("config")
-		apiClientOpts.ConfigSection = c.GlobalString("section")
-		apiClientOpts.DebugLevel = c.GlobalString("debug")
-		apiClientOpts.AccountSwitchKey = c.GlobalString("ask")
-
-		apiClient, err = edgegrid.NewClient(nil, apiClientOpts)
-
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+		creds := edgegrid.NewCredentials().AutoLoad(c.GlobalString("section"))
+		config := edgegrid.NewConfig().WithCredentials(creds).WithLogVerbosity(c.GlobalString("debug")).WithAccountSwitchKey(c.GlobalString("ask"))
+		if c.GlobalString("debug") == "debug" {
+			config = edgegrid.NewConfig().WithCredentials(creds).WithLogVerbosity(c.GlobalString("debug")).WithAccountSwitchKey(c.GlobalString("ask")).WithRequestDebug(true)
 		}
+		// Provide struct details needed for apiClient init
+		apiClient = service.New(config)
 
 		return nil
 	}
