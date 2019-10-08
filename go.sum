@@ -3,13 +3,6 @@ github.com/apiheat/akamai-cli-common v3.1.0+incompatible h1:xUs6GxlY+7v0zKi0+Dmo
 github.com/apiheat/akamai-cli-common v3.1.0+incompatible/go.mod h1:ZCDNkPlvpcz/OnGM7O3TymKwbI1KJ7jLyB0aOfcJvCc=
 github.com/apiheat/go-edgegrid v6.0.1+incompatible h1:JvwqSU89onb4/EcH32DFrp4dNu8Ei/KNaiOmEY45EDk=
 github.com/apiheat/go-edgegrid v6.0.1+incompatible/go.mod h1:+gACyrB9+3TRIxCzdihSiCzrLSdhWvJAXq74KMfPzMs=
-github.com/apiheat/go-edgegrid/v6 v6.1.5 h1:8MFUqIIQ53rOHwC7n90X/dr/dQVOHFBAy9yVCiXj8qc=
-github.com/apiheat/go-edgegrid/v6 v6.1.6-0.20191002140227-5ec99eabbc7c h1:sCEOUNxeTC0HoQSPQnfhLqv8GYDUWGPkp+lRFJ6pFLA=
-github.com/apiheat/go-edgegrid/v6 v6.1.6-0.20191002140227-5ec99eabbc7c/go.mod h1:At9IQFFbIBGaRkyqQ08gvaHB7+HEvO/GgtICYuLUZkU=
-github.com/apiheat/go-edgegrid/v6 v6.1.6-0.20191003110410-d2029f9952cf h1:gEwiaU8Jef+631WfWKvmkjLpnIrZm7UI0pn567XnY0k=
-github.com/apiheat/go-edgegrid/v6 v6.1.6-0.20191003110410-d2029f9952cf/go.mod h1:At9IQFFbIBGaRkyqQ08gvaHB7+HEvO/GgtICYuLUZkU=
-github.com/apiheat/go-edgegrid/v6 v6.1.6 h1:4sIDaXwaGN7lGGlHXN+u7NW2of7YGuC7vKfmpUVudKI=
-github.com/apiheat/go-edgegrid/v6 v6.1.6/go.mod h1:At9IQFFbIBGaRkyqQ08gvaHB7+HEvO/GgtICYuLUZkU=
 github.com/apiheat/go-edgegrid/v6 v6.1.8 h1:7ukNtaGVo/G3DvQ++Ngd0EV0Kb8W0ntGCMehTP+IEBw=
 github.com/apiheat/go-edgegrid/v6 v6.1.8/go.mod h1:At9IQFFbIBGaRkyqQ08gvaHB7+HEvO/GgtICYuLUZkU=
 github.com/asaskevich/govalidator v0.0.0-20180315120708-ccb8e960c48f h1:y2hSFdXeA1y5z5f0vfNO0Dg5qVY036qzlz3Pds0B92o=
