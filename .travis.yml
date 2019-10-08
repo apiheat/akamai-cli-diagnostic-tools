@@ -5,7 +5,7 @@ language: go
 if: tag IS present
 
 env:
-  - DEP_VERSION="0.5.0"
+  - GO111MODULE=on
 
 install:
   - go get ./...

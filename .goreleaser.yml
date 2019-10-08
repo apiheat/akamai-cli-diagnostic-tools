@@ -1,5 +1,10 @@
 # .goreleaser.yml
 # Build customization
+env:
+  - GO111MODULE=on
+before:
+  hooks:
+    - go mod tidy
 builds:
   -
     binary: "{{ .ProjectName }}"
