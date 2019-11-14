@@ -10,7 +10,7 @@
         "diag",
         "dtools"
       ],
-      "version": "0.0.9",
+      "version": "0.1.0",
       "description": "Diagnostic Tools",
       "bin": "https://github.com/apiheat/akamai-cli-diagnostic-tools/releases/download/v{{.Version}}/akamai-cli-{{.Name}}_{{.OS}}_{{.Arch}}{{.BinSuffix}}"
     }
